@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeCraft - Create Your Professional Resume in Minutes</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#4F46E5',secondary:'#10B981'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .resume-form-container {
+            display: none;
+        }
+        .resume-form-container.active {
+            display: block;
+        }
+        .form-step {
+            display: none;
+        }
+        .form-step.active {
+            display: block;
+        }
+        .template-preview {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .template-preview:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .custom-checkbox {
+            position: relative;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid #d1d5db;
+            background-color: white;
+            transition: all 0.2s ease;
+        }
+        .custom-checkbox.checked {
+            background-color: #4F46E5;
+            border-color: #4F46E5;
+        }
+        .custom-checkbox.checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white' stroke-width='3'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M5 13l4 4L19 7' /%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        .custom-radio {
+            position: relative;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #d1d5db;
+            background-color: white;
+            transition: all 0.2s ease;
+        }
+        .custom-radio.checked {
+            border-color: #4F46E5;
+        }
+        .custom-radio.checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #4F46E5;
+        }
+        .custom-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+        .custom-switch-input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .custom-switch-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .custom-switch-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        .custom-switch-input:checked + .custom-switch-slider {
+            background-color: #4F46E5;
+        }
+        .custom-switch-input:checked + .custom-switch-slider:before {
+            transform: translateX(24px);
+        }
+        .custom-range {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 5px;
+            background: #e5e7eb;
+            outline: none;
+        }
+        .custom-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #4F46E5;
+            cursor: pointer;
+        }
+        .custom-range::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #4F46E5;
+            cursor: pointer;
+            border: none;
+        }
+        .testimonial-container {
+            overflow: hidden;
+            position: relative;
+        }
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        .testimonial-item {
+            flex: 0 0 100%;
+        }
+        .progress-bar {
+            height: 6px;
+            background-color: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #4F46E5;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-['Pacifico'] text-primary">ResumeCraft</a>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#templates" class="text-gray-600 hover:text-primary transition-colors">Templates</a>
+                <a href="#features" class="text-gray-600 hover:text-primary transition-colors">Features</a>
+                <a href="#testimonials" class="text-gray-600 hover:text-primary transition-colors">Testimonials</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <button id="login-btn" class="text-primary font-medium hover:text-primary/80 transition-colors">Log In</button>
+                <button id="signup-btn" class="bg-primary text-white px-4 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">Sign Up</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="relative py-16 md:py-24 overflow-hidden">
+            <div style="background-image: url('https://readdy.ai/api/search-image?query=professional%20modern%20workspace%20with%20laptop%2C%20resume%20documents%2C%20and%20office%20supplies%20on%20a%20clean%20desk%20with%20soft%20natural%20lighting%2C%20blurred%20on%20the%20left%20side%20for%20text%20overlay%2C%20professional%20atmosphere%2C%20high%20quality%2C%204k&width=1600&height=800&seq=1&orientation=landscape'); background-position: right center; background-size: cover;" class="absolute inset-0 z-0"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-white/20 z-0"></div>
+            
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="max-w-2xl">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Create Your Professional Resume in Minutes – Absolutely Free!</h1>
+                    <p class="text-xl text-gray-700 mb-8">Choose a template, fill in your details, and download your resume instantly. Stand out from the crowd with a professionally designed resume.</p>
+                    <div class="flex flex-wrap gap-4">
+                        <button id="start-building-btn" class="bg-primary text-white px-6 py-3 !rounded-button font-medium text-lg hover:bg-primary/90 transition-colors flex items-center whitespace-nowrap">
+                            <span>Start Building</span>
+                            <div class="w-5 h-5 ml-2 flex items-center justify-center">
+                                <i class="ri-arrow-right-line"></i>
+                            </div>
+                        </button>
+                        <button class="bg-white text-gray-800 px-6 py-3 !rounded-button font-medium text-lg border border-gray-300 hover:bg-gray-50 transition-colors flex items-center whitespace-nowrap">
+                            <span>View Templates</span>
+                            <div class="w-5 h-5 ml-2 flex items-center justify-center">
+                                <i class="ri-eye-line"></i>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Templates Section -->
+        <section id="templates" class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Professional Resume Templates</h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">Choose from our collection of professionally designed templates that will help you stand out from the crowd.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Template 1 -->
+                    <div class="template-preview bg-white rounded shadow-md overflow-hidden">
+                        <div class="h-64 bg-gray-100 relative">
+                            <img src="https://readdy.ai/api/search-image?query=professional%20resume%20template%20with%20classic%20design%2C%20navy%20blue%20accents%2C%20two-column%20layout%2C%20clean%20typography%2C%20professional%20corporate%20style%2C%20white%20background%2C%20high%20quality%2C%20detailed&width=400&height=500&seq=2&orientation=portrait" alt="Classic Professional Template" class="w-full h-full object-cover object-top">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button class="bg-white text-gray-900 px-4 py-2 !rounded-button font-medium hover:bg-gray-100 transition-colors whitespace-nowrap">Preview</button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-900">Classic Professional</h3>
+                            <p class="text-gray-600 text-sm mt-1">Perfect for corporate roles</p>
+                        </div>
+                    </div>
+
+                    <!-- Template 2 -->
+                    <div class="template-preview bg-white rounded shadow-md overflow-hidden">
+                        <div class="h-64 bg-gray-100 relative">
+                            <img src="https://readdy.ai/api/search-image?query=modern%20minimal%20resume%20template%20with%20single-column%20design%2C%20clean%20typography%2C%20ample%20white%20space%2C%20subtle%20gray%20accents%2C%20tech-focused%20layout%2C%20professional%2C%20white%20background%2C%20high%20quality%2C%20detailed&width=400&height=500&seq=3&orientation=portrait" alt="Modern Minimal Template" class="w-full h-full object-cover object-top">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button class="bg-white text-gray-900 px-4 py-2 !rounded-button font-medium hover:bg-gray-100 transition-colors whitespace-nowrap">Preview</button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-900">Modern Minimal</h3>
+                            <p class="text-gray-600 text-sm mt-1">Ideal for tech roles</p>
+                        </div>
+                    </div>
+
+                    <!-- Template 3 -->
+                    <div class="template-preview bg-white rounded shadow-md overflow-hidden">
+                        <div class="h-64 bg-gray-100 relative">
+                            <img src="https://readdy.ai/api/search-image?query=creative%20designer%20resume%20template%20with%20asymmetrical%20layout%2C%20custom%20graphics%2C%20portfolio%20section%2C%20artistic%20elements%2C%20creative%20field%20focused%2C%20colorful%20accents%2C%20white%20background%2C%20high%20quality%2C%20detailed&width=400&height=500&seq=4&orientation=portrait" alt="Creative Designer Template" class="w-full h-full object-cover object-top">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button class="bg-white text-gray-900 px-4 py-2 !rounded-button font-medium hover:bg-gray-100 transition-colors whitespace-nowrap">Preview</button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-900">Creative Designer</h3>
+                            <p class="text-gray-600 text-sm mt-1">Suited for creative fields</p>
+                        </div>
+                    </div>
+
+                    <!-- Template 4 -->
+                    <div class="template-preview bg-white rounded shadow-md overflow-hidden">
+                        <div class="h-64 bg-gray-100 relative">
+                            <img src="https://readdy.ai/api/search-image?query=executive%20premium%20resume%20template%20with%20sophisticated%20header%2C%20achievement-focused%20layout%2C%20professional%20summary%20spotlight%2C%20elegant%20design%20for%20senior%20positions%2C%20dark%20accents%2C%20white%20background%2C%20high%20quality%2C%20detailed&width=400&height=500&seq=5&orientation=portrait" alt="Executive Premium Template" class="w-full h-full object-cover object-top">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button class="bg-white text-gray-900 px-4 py-2 !rounded-button font-medium hover:bg-gray-100 transition-colors whitespace-nowrap">Preview</button>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-900">Executive Premium</h3>
+                            <p class="text-gray-600 text-sm mt-1">For senior positions</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-10">
+                    <button class="bg-white text-primary border border-primary px-6 py-3 !rounded-button font-medium hover:bg-primary/5 transition-colors whitespace-nowrap">
+                        View All Templates
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Companies Section -->
+        <section class="py-12 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <p class="text-center text-lg text-gray-600 mb-8">Our resumes helped people land jobs at...</p>
+                <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-6 h-6 flex items-center justify-center text-gray-700">
+                            <i class="ri-google-fill ri-lg"></i>
+                        </div>
+                        <span class="font-medium text-gray-800">Google</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-6 h-6 flex items-center justify-center text-gray-700">
+                            <i class="ri-microsoft-fill ri-lg"></i>
+                        </div>
+                        <span class="font-medium text-gray-800">Microsoft</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-6 h-6 flex items-center justify-center text-gray-700">
+                            <i class="ri-amazon-fill ri-lg"></i>
+                        </div>
+                        <span class="font-medium text-gray-800">Amazon</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-6 h-6 flex items-center justify-center text-gray-700">
+                            <i class="ri-facebook-fill ri-lg"></i>
+                        </div>
+                        <span class="font-medium text-gray-800">Meta</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-6 h-6 flex items-center justify-center text-gray-700">
+                            <i class="ri-netflix-fill ri-lg"></i>
+                        </div>
+                        <span class="font-medium text-gray-800">Netflix</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Why ResumeCraft?</h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">Our platform offers everything you need to create a professional resume that stands out.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="bg-white p-6 rounded shadow-sm border border-gray-100">
+                        <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                            <div class="w-6 h-6 flex items-center justify-center text-primary">
+                                <i class="ri-money-dollar-circle-line ri-lg"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">100% Free</h3>
+                        <p class="text-gray-600">No hidden fees or premium features. Create and download as many resumes as you need.</p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="bg-white p-6 rounded shadow-sm border border-gray-100">
+                        <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                            <div class="w-6 h-6 flex items-center justify-center text-primary">
+                                <i class="ri-user-smile-line ri-lg"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Easy to Use</h3>
+                        <p class="text-gray-600">Our intuitive interface guides you through each step of the resume creation process.</p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="bg-white p-6 rounded shadow-sm border border-gray-100">
+                        <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                            <div class="w-6 h-6 flex items-center justify-center text-primary">
+                                <i class="ri-check-double-line ri-lg"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">ATS-Friendly</h3>
+                        <p class="text-gray-600">All our templates are optimized to pass through Applicant Tracking Systems.</p>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="bg-white p-6 rounded shadow-sm border border-gray-100">
+                        <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                            <div class="w-6 h-6 flex items-center justify-center text-primary">
+                                <i class="ri-file-download-line ri-lg"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Download in PDF</h3>
+                        <p class="text-gray-600">Get your resume in multiple formats including PDF, DOC, and more.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">What Our Users Say</h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">Thousands of job seekers have used ResumeCraft to land their dream jobs.</p>
+                </div>
+
+                <div class="testimonial-container max-w-4xl mx-auto">
+                    <div class="testimonial-track">
+                        <!-- Testimonial 1 -->
+                        <div class="testimonial-item px-4">
+                            <div class="bg-white p-8 rounded shadow-sm">
+                                <div class="flex items-center mb-4">
+                                    <div class="text-yellow-400 flex">
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700 mb-6">"I was struggling to create a resume that would stand out. ResumeCraft made it so easy! I created a professional resume in less than 30 minutes and got called for an interview within a week. Highly recommend!"</p>
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden mr-4">
+                                        <img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20woman%20with%20brown%20hair%2C%20smiling%2C%20business%20attire%2C%20neutral%20background%2C%20high%20quality%20portrait&width=100&height=100&seq=6&orientation=squarish" alt="Emily Johnson" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900">Emily Johnson</h4>
+                                        <p class="text-gray-600 text-sm">Marketing Specialist at Adobe</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Testimonial 2 -->
+                        <div class="testimonial-item px-4">
+                            <div class="bg-white p-8 rounded shadow-sm">
+                                <div class="flex items-center mb-4">
+                                    <div class="text-yellow-400 flex">
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700 mb-6">"As a recent graduate, I had no idea how to format my resume. ResumeCraft's templates and guidance helped me showcase my skills effectively. I landed a job at my dream company within a month!"</p>
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden mr-4">
+                                        <img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20young%20man%20with%20black%20hair%2C%20smiling%2C%20business%20casual%20attire%2C%20neutral%20background%2C%20high%20quality%20portrait&width=100&height=100&seq=7&orientation=squarish" alt="David Chen" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900">David Chen</h4>
+                                        <p class="text-gray-600 text-sm">Software Engineer at Microsoft</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Testimonial 3 -->
+                        <div class="testimonial-item px-4">
+                            <div class="bg-white p-8 rounded shadow-sm">
+                                <div class="flex items-center mb-4">
+                                    <div class="text-yellow-400 flex">
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                    </div>
+                                </div>
+                                <p class="text-gray-700 mb-6">"I was looking to switch careers and needed a resume that highlighted my transferable skills. ResumeCraft's templates were perfect, and the guidance helped me emphasize the right experience. I'm now in my new role and couldn't be happier!"</p>
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden mr-4">
+                                        <img src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20woman%20with%20blonde%20hair%2C%20smiling%2C%20business%20attire%2C%20neutral%20background%2C%20high%20quality%20portrait&width=100&height=100&seq=8&orientation=squarish" alt="Sarah Williams" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900">Sarah Williams</h4>
+                                        <p class="text-gray-600 text-sm">Project Manager at Amazon</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center mt-8 space-x-2">
+                        <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300 hover:bg-primary transition-colors" data-index="0"></button>
+                        <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300 hover:bg-primary transition-colors" data-index="1"></button>
+                        <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300 hover:bg-primary transition-colors" data-index="2"></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-16 bg-primary">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-3xl font-bold text-white mb-6">Ready to Create Your Professional Resume?</h2>
+                <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">Join thousands of job seekers who have successfully landed their dream jobs with ResumeCraft.</p>
+                <button id="cta-start-building-btn" class="bg-white text-primary px-8 py-3 !rounded-button font-medium text-lg hover:bg-gray-100 transition-colors whitespace-nowrap">Start Building Now</button>
+            </div>
+        </section>
+
+        <!-- Resume Builder Form -->
+        <div id="resume-builder" class="resume-form-container bg-gray-50 py-10">
+            <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+                    <!-- Progress Bar -->
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <h2 class="text-2xl font-bold text-gray-900">Build Your Resume</h2>
+                            <button id="save-progress-btn" class="text-primary flex items-center hover:text-primary/80 transition-colors">
+                                <div class="w-5 h-5 mr-1 flex items-center justify-center">
+                                    <i class="ri-save-line"></i>
+                                </div>
+                                <span>Save Progress</span>
+                            </button>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill" style="width: 16.66%"></div>
+                        </div>
+                        <div class="flex justify-between mt-2 text-sm text-gray-500">
+                            <span>Step 1 of 6</span>
+                            <span id="step-title">Personal Info</span>
+                        </div>
+                    </div>
+
+                    <!-- Form Steps -->
+                    <div class="p-6">
+                        <!-- Step 1: Personal Info -->
+                        <div class="form-step active" data-step="1">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6">Personal Information</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label for="fullName" class="block text-gray-700 font-medium mb-2">Full Name</label>
+                                    <input type="text" id="fullName" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., John Smith">
+                                </div>
+                                
+                                <div>
+                                    <label for="jobTitle" class="block text-gray-700 font-medium mb-2">Job Title</label>
+                                    <input type="text" id="jobTitle" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., Marketing Manager">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+                                    <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., john.smith@example.com">
+                                </div>
+                                
+                                <div>
+                                    <label for="phone" class="block text-gray-700 font-medium mb-2">Phone</label>
+                                    <input type="tel" id="phone" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., (123) 456-7890">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label for="location" class="block text-gray-700 font-medium mb-2">Location</label>
+                                    <input type="text" id="location" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., New York, NY">
+                                </div>
+                                
+                                <div>
+                                    <label for="website" class="block text-gray-700 font-medium mb-2">Website/Portfolio (Optional)</label>
+                                    <input type="url" id="website" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., www.johnsmith.com">
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <label for="linkedin" class="block text-gray-700 font-medium mb-2">LinkedIn URL (Optional)</label>
+                                    <input type="url" id="linkedin" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., linkedin.com/in/johnsmith">
+                                </div>
+                                
+                                <div>
+                                    <label for="github" class="block text-gray-700 font-medium mb-2">GitHub URL (Optional)</label>
+                                    <input type="url" id="github" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., github.com/johnsmith">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label class="block text-gray-700 font-medium mb-2">Profile Picture (Optional)</label>
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                                        <div class="w-6 h-6 flex items-center justify-center text-gray-400">
+                                            <i class="ri-user-line ri-lg"></i>
+                                        </div>
+                                    </div>
+                                    <button class="bg-white text-gray-700 border border-gray-300 px-4 py-2 !rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap">Upload Photo</button>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-end">
+                                <button class="next-step bg-primary text-white px-6 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">
+                                    Next: Career Objective
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Career Objective / Summary -->
+                        <div class="form-step" data-step="2">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6">Career Objective / Summary</h3>
+                            
+                            <div class="mb-6">
+                                <label for="careerObjective" class="block text-gray-700 font-medium mb-2">Professional Summary</label>
+                                <textarea id="careerObjective" rows="6" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Write a brief summary of your professional background, skills, and career goals..."></textarea>
+                                <p class="text-sm text-gray-500 mt-2">Aim for 3-5 sentences that highlight your experience, key skills, and what you're looking for.</p>
+                            </div>
+                            
+                            <div class="bg-blue-50 p-4 rounded mb-6">
+                                <h4 class="font-medium text-blue-800 mb-2">Tips for a Great Summary</h4>
+                                <ul class="text-blue-700 text-sm space-y-1">
+                                    <li>• Start with your professional title and years of experience</li>
+                                    <li>• Highlight 2-3 key achievements or skills relevant to the job</li>
+                                    <li>• Mention your career goals that align with the position</li>
+                                    <li>• Keep it concise and focused on what you bring to the table</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h4 class="font-medium text-gray-700 mb-2">Example Summaries</h4>
+                                <div class="space-y-3">
+                                    <div class="bg-gray-50 p-3 rounded text-sm text-gray-600">
+                                        "Dedicated marketing professional with 5+ years of experience in digital marketing and campaign management. Proven track record of increasing website traffic by 150% and generating $1M+ in revenue through strategic campaigns. Seeking to leverage my expertise in a Senior Marketing role."
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded text-sm text-gray-600">
+                                        "Detail-oriented software developer with 3 years of experience in full-stack development. Proficient in JavaScript, React, and Node.js with a passion for creating clean, efficient code. Looking to contribute my technical skills to a forward-thinking tech company."
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <button class="prev-step bg-white text-gray-700 border border-gray-300 px-6 py-2 !rounded-button font-medium hover:bg-gray-50 transition-colors whitespace-nowrap">
+                                    Previous: Personal Info
+                                </button>
+                                <button class="next-step bg-primary text-white px-6 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">
+                                    Next: Work Experience
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Work Experience -->
+                        <div class="form-step" data-step="3">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6">Work Experience</h3>
+                            
+                            <div id="experience-container">
+                                <div class="experience-item bg-gray-50 p-6 rounded mb-6">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                        <div>
+                                            <label class="block text-gray-700 font-medium mb-2">Job Title</label>
+                                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., Marketing Manager">
+                                        </div>
+                                        
+                                        <div>
+                                            <label class="block text-gray-700 font-medium mb-2">Company Name</label>
+                                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., ABC Corporation">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                        <div>
+                                            <label class="block text-gray-700 font-medium mb-2">Start Date</label>
+                                            <input type="month" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                        </div>
+                                        
+                                        <div>
+                                            <label class="block text-gray-700 font-medium mb-2">End Date</label>
+                                            <div class="space-y-2">
+                                                <input type="month" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                                <div class="flex items-center">
+                                                    <div class="custom-checkbox mr-2" onclick="this.classList.toggle('checked')"></div>
+                                                    <label class="text-sm text-gray-700">I currently work here</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-6">
+                                        <label class="block text-gray-700 font-medium mb-2">Job Description</label>
+                                        <textarea rows="4" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Describe your responsibilities, achievements, and key contributions..."></textarea>
+                                        <p class="text-sm text-gray-500 mt-2">Use bullet points and quantify achievements when possible (e.g., "Increased sales by 20%").</p>
+                                    </div>
+                                    
+                                    <div class="flex justify-end">
+                                        <button class="remove-experience text-red-600 hover:text-red-800 transition-colors flex items-center">
+                                            <div class="w-5 h-5 mr-1 flex items-center justify-center">
+                                                <i class="ri-delete-bin-line"></i>
+                                            </div>
+                                            <span>Remove</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <button id="add-experience" class="text-primary hover:text-primary/80 transition-colors flex items-center">
+                                    <div class="w-5 h-5 mr-1 flex items-center justify-center">
+                                        <i class="ri-add-circle-line"></i>
+                                    </div>
+                                    <span>Add Another Experience</span>
+                                </button>
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <button class="prev-step bg-white text-gray-700 border border-gray-300 px-6 py-2 !rounded-button font-medium hover:bg-gray-50 transition-colors whitespace-nowrap">
+                                    Previous: Career Objective
+                                </button>
+                                <button class="next-step bg-primary text-white px-6 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">
+                                    Next: Education
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Education -->
+                        <div class="form-step" data-step="4">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6">Education</h3>
+                            
+                            <div id="education-container">
+                                <div class="education-item bg-gray-50 p-6 rounded mb-6">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                        <div>
+                                            <label class="block text-gray-700 font-medium mb-2">Degree / Certificate</label>
+                                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., Bachelor of Science in Computer Science">
+                                        </div>
+                                        
+                                        <div>
+                                            <label class="block text-gray-700 font-medium mb-2">School / University</label>
+                                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., Stanford University">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                        <div>
+                                            <label class="block text-gray-700 font-medium mb-2">Start Date</label>
+                                            <input type="month" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                        </div>
+                                        
+                                        <div>
+                                            <label class="block text-gray-700 font-medium mb-2">End Date</label>
+                                            <div class="space-y-2">
+                                                <input type="month" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                                                <div class="flex items-center">
+                                                    <div class="custom-checkbox mr-2" onclick="this.classList.toggle('checked')"></div>
+                                                    <label class="text-sm text-gray-700">Currently studying here</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                        <div>
+                                            <label class="block text-gray-700 font-medium mb-2">GPA / Percentage</label>
+                                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., 3.8/4.0 or 85%">
+                                        </div>
+                                        
+                                        <div>
+                                            <label class="block text-gray-700 font-medium mb-2">Field of Study</label>
+                                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., Computer Science">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-6">
+                                        <label class="block text-gray-700 font-medium mb-2">Additional Information (Optional)</label>
+                                        <textarea rows="3" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Relevant coursework, honors, activities, etc."></textarea>
+                                    </div>
+                                    
+                                    <div class="flex justify-end">
+                                        <button class="remove-education text-red-600 hover:text-red-800 transition-colors flex items-center">
+                                            <div class="w-5 h-5 mr-1 flex items-center justify-center">
+                                                <i class="ri-delete-bin-line"></i>
+                                            </div>
+                                            <span>Remove</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <button id="add-education" class="text-primary hover:text-primary/80 transition-colors flex items-center">
+                                    <div class="w-5 h-5 mr-1 flex items-center justify-center">
+                                        <i class="ri-add-circle-line"></i>
+                                    </div>
+                                    <span>Add Another Education</span>
+                                </button>
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <button class="prev-step bg-white text-gray-700 border border-gray-300 px-6 py-2 !rounded-button font-medium hover:bg-gray-50 transition-colors whitespace-nowrap">
+                                    Previous: Work Experience
+                                </button>
+                                <button class="next-step bg-primary text-white px-6 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">
+                                    Next: Skills & Languages
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Skills & Languages -->
+                        <div class="form-step" data-step="5">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6">Skills & Languages</h3>
+                            
+                            <div class="mb-8">
+                                <label class="block text-gray-700 font-medium mb-2">Skills</label>
+                                <div class="flex flex-wrap gap-2 mb-3">
+                                    <div class="bg-primary/10 text-primary px-3 py-1 rounded-full flex items-center">
+                                        <span>JavaScript</span>
+                                        <button class="ml-2 text-primary/70 hover:text-primary">
+                                            <div class="w-4 h-4 flex items-center justify-center">
+                                                <i class="ri-close-line"></i>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <div class="bg-primary/10 text-primary px-3 py-1 rounded-full flex items-center">
+                                        <span>React</span>
+                                        <button class="ml-2 text-primary/70 hover:text-primary">
+                                            <div class="w-4 h-4 flex items-center justify-center">
+                                                <i class="ri-close-line"></i>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <div class="bg-primary/10 text-primary px-3 py-1 rounded-full flex items-center">
+                                        <span>Node.js</span>
+                                        <button class="ml-2 text-primary/70 hover:text-primary">
+                                            <div class="w-4 h-4 flex items-center justify-center">
+                                                <i class="ri-close-line"></i>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <input type="text" id="skill-input" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Type a skill and press Enter (e.g., Project Management, Photoshop, Python)">
+                                    <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                        <div class="w-5 h-5 flex items-center justify-center">
+                                            <i class="ri-add-line"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">Add skills relevant to the position you're applying for.</p>
+                            </div>
+                            
+                            <div class="mb-8">
+                                <label class="block text-gray-700 font-medium mb-2">Languages</label>
+                                <div id="languages-container">
+                                    <div class="language-item grid grid-cols-3 gap-4 items-center mb-4">
+                                        <div class="col-span-1">
+                                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="e.g., English">
+                                        </div>
+                                        <div class="col-span-1">
+                                            <select class="w-full px-4 py-2 pr-8 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary appearance-none bg-white">
+                                                <option value="">Select Proficiency</option>
+                                                <option value="Native">Native</option>
+                                                <option value="Fluent">Fluent</option>
+                                                <option value="Advanced">Advanced</option>
+                                                <option value="Intermediate">Intermediate</option>
+                                                <option value="Basic">Basic</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <button class="remove-language text-red-600 hover:text-red-800 transition-colors flex items-center">
+                                                <div class="w-5 h-5 mr-1 flex items-center justify-center">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </div>
+                                                <span>Remove</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button id="add-language" class="text-primary hover:text-primary/80 transition-colors flex items-center">
+                                    <div class="w-5 h-5 mr-1 flex items-center justify-center">
+                                        <i class="ri-add-circle-line"></i>
+                                    </div>
+                                    <span>Add Another Language</span>
+                                </button>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label class="block text-gray-700 font-medium mb-2">Certifications (Optional)</label>
+                                <div id="certifications-container">
+                                    <div class="certification-item grid grid-cols-1 md:grid-cols-3 gap-4 items-center mb-4">
+                                        <div>
+                                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Certification Name">
+                                        </div>
+                                        <div>
+                                            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Issuing Organization">
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input type="month" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" placeholder="Date">
+                                            <button class="remove-certification ml-2 text-red-600 hover:text-red-800 transition-colors">
+                                                <div class="w-5 h-5 flex items-center justify-center">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button id="add-certification" class="text-primary hover:text-primary/80 transition-colors flex items-center">
+                                    <div class="w-5 h-5 mr-1 flex items-center justify-center">
+                                        <i class="ri-add-circle-line"></i>
+                                    </div>
+                                    <span>Add Another Certification</span>
+                                </button>
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <button class="prev-step bg-white text-gray-700 border border-gray-300 px-6 py-2 !rounded-button font-medium hover:bg-gray-50 transition-colors whitespace-nowrap">
+                                    Previous: Education
+                                </button>
+                                <button class="next-step bg-primary text-white px-6 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">
+                                    Next: Finalize
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 6: Finalize -->
+                        <div class="form-step" data-step="6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-6">Choose a Template</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                <div class="template-option border-2 border-primary rounded p-2 cursor-pointer">
+                                    <div class="h-64 bg-gray-100 mb-2">
+                                        <img src="https://readdy.ai/api/search-image?query=professional%20resume%20template%20with%20classic%20design%2C%20navy%20blue%20accents%2C%20two-column%20layout%2C%20clean%20typography%2C%20professional%20corporate%20style%2C%20white%20background%2C%20high%20quality%2C%20detailed&width=400&height=500&seq=9&orientation=portrait" alt="Classic Professional Template" class="w-full h-full object-cover object-top">
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="custom-radio checked mr-2" onclick="selectTemplate(this)"></div>
+                                        <label class="font-medium text-gray-800">Classic Professional</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="template-option border-2 border-gray-200 rounded p-2 cursor-pointer">
+                                    <div class="h-64 bg-gray-100 mb-2">
+                                        <img src="https://readdy.ai/api/search-image?query=modern%20minimal%20resume%20template%20with%20single-column%20design%2C%20clean%20typography%2C%20ample%20white%20space%2C%20subtle%20gray%20accents%2C%20tech-focused%20layout%2C%20professional%2C%20white%20background%2C%20high%20quality%2C%20detailed&width=400&height=500&seq=10&orientation=portrait" alt="Modern Minimal Template" class="w-full h-full object-cover object-top">
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="custom-radio mr-2" onclick="selectTemplate(this)"></div>
+                                        <label class="font-medium text-gray-800">Modern Minimal</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                <div class="template-option border-2 border-gray-200 rounded p-2 cursor-pointer">
+                                    <div class="h-64 bg-gray-100 mb-2">
+                                        <img src="https://readdy.ai/api/search-image?query=creative%20designer%20resume%20template%20with%20asymmetrical%20layout%2C%20custom%20graphics%2C%20portfolio%20section%2C%20artistic%20elements%2C%20creative%20field%20focused%2C%20colorful%20accents%2C%20white%20background%2C%20high%20quality%2C%20detailed&width=400&height=500&seq=11&orientation=portrait" alt="Creative Designer Template" class="w-full h-full object-cover object-top">
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="custom-radio mr-2" onclick="selectTemplate(this)"></div>
+                                        <label class="font-medium text-gray-800">Creative Designer</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="template-option border-2 border-gray-200 rounded p-2 cursor-pointer">
+                                    <div class="h-64 bg-gray-100 mb-2">
+                                        <img src="https://readdy.ai/api/search-image?query=executive%20premium%20resume%20template%20with%20sophisticated%20header%2C%20achievement-focused%20layout%2C%20professional%20summary%20spotlight%2C%20elegant%20design%20for%20senior%20positions%2C%20dark%20accents%2C%20white%20background%2C%20high%20quality%2C%20detailed&width=400&height=500&seq=12&orientation=portrait" alt="Executive Premium Template" class="w-full h-full object-cover object-top">
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="custom-radio mr-2" onclick="selectTemplate(this)"></div>
+                                        <label class="font-medium text-gray-800">Executive Premium</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-blue-50 p-4 rounded mb-8">
+                                <h4 class="font-medium text-blue-800 mb-2">Final Check</h4>
+                                <p class="text-blue-700 text-sm">Make sure all your information is accurate and complete. You can always come back and edit your resume later.</p>
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <button class="prev-step bg-white text-gray-700 border border-gray-300 px-6 py-2 !rounded-button font-medium hover:bg-gray-50 transition-colors whitespace-nowrap">
+                                    Previous: Skills & Languages
+                                </button>
+                                <button id="generate-resume-btn" class="bg-primary text-white px-6 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors flex items-center whitespace-nowrap">
+                                    <span>Generate Resume</span>
+                                    <div class="w-5 h-5 ml-2 flex items-center justify-center">
+                                        <i class="ri-file-text-line"></i>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resume Preview Section -->
+        <div id="resume-preview" class="resume-form-container bg-gray-50 py-10">
+            <div class="container mx-auto px-4">
+                <div class="max-w-6xl mx-auto">
+                    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold text-gray-900">Your Resume is Ready!</h2>
+                            <button id="back-to-edit" class="text-primary hover:text-primary/80 transition-colors flex items-center">
+                                <div class="w-5 h-5 mr-1 flex items-center justify-center">
+                                    <i class="ri-edit-line"></i>
+                                </div>
+                                <span>Edit Again</span>
+                            </button>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <!-- Resume Preview -->
+                            <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                                <div class="h-[800px] overflow-auto">
+                                    <img src="https://readdy.ai/api/search-image?query=professional%20resume%20with%20classic%20design%2C%20navy%20blue%20header%2C%20two-column%20layout%2C%20filled%20with%20sample%20text%2C%20clean%20typography%2C%20professional%20corporate%20style%2C%20white%20background%2C%20high%20quality%2C%20detailed&width=600&height=800&seq=13&orientation=portrait" alt="Resume Preview" class="w-full">
+                                </div>
+                            </div>
+                            
+                            <!-- Download Options -->
+                            <div>
+                                <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Download Options</h3>
+                                    <div class="space-y-4">
+                                        <button class="w-full bg-primary text-white px-4 py-3 !rounded-button font-medium hover:bg-primary/90 transition-colors flex items-center justify-center whitespace-nowrap">
+                                            <div class="w-5 h-5 mr-2 flex items-center justify-center">
+                                                <i class="ri-file-pdf-line"></i>
+                                            </div>
+                                            <span>Download as PDF</span>
+                                        </button>
+                                        <button class="w-full bg-white text-gray-700 border border-gray-300 px-4 py-3 !rounded-button font-medium hover:bg-gray-50 transition-colors flex items-center justify-center whitespace-nowrap">
+                                            <div class="w-5 h-5 mr-2 flex items-center justify-center">
+                                                <i class="ri-file-word-line"></i>
+                                            </div>
+                                            <span>Download as DOC</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Share Your Resume</h3>
+                                    <div class="space-y-4">
+                                        <button class="w-full bg-white text-gray-700 border border-gray-300 px-4 py-3 !rounded-button font-medium hover:bg-gray-50 transition-colors flex items-center justify-center whitespace-nowrap">
+                                            <div class="w-5 h-5 mr-2 flex items-center justify-center">
+                                                <i class="ri-mail-line"></i>
+                                            </div>
+                                            <span>Share via Email</span>
+                                        </button>
+                                        <button class="w-full bg-white text-gray-700 border border-gray-300 px-4 py-3 !rounded-button font-medium hover:bg-gray-50 transition-colors flex items-center justify-center whitespace-nowrap">
+                                            <div class="w-5 h-5 mr-2 flex items-center justify-center">
+                                                <i class="ri-whatsapp-line"></i>
+                                            </div>
+                                            <span>Share via WhatsApp</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-yellow-50 p-6 rounded-lg">
+                                    <h3 class="text-lg font-semibold text-yellow-800 mb-3">Tips to Make Your Resume Stand Out</h3>
+                                    <ul class="text-yellow-700 space-y-2">
+                                        <li class="flex">
+                                            <div class="w-5 h-5 mr-2 flex-shrink-0 flex items-center justify-center text-yellow-600">
+                                                <i class="ri-check-line"></i>
+                                            </div>
+                                            <span>Tailor your resume for each job application</span>
+                                        </li>
+                                        <li class="flex">
+                                            <div class="w-5 h-5 mr-2 flex-shrink-0 flex items-center justify-center text-yellow-600">
+                                                <i class="ri-check-line"></i>
+                                            </div>
+                                            <span>Quantify achievements with numbers when possible</span>
+                                        </li>
+                                        <li class="flex">
+                                            <div class="w-5 h-5 mr-2 flex-shrink-0 flex items-center justify-center text-yellow-600">
+                                                <i class="ri-check-line"></i>
+                                            </div>
+                                            <span>Use action verbs to describe your experience</span>
+                                        </li>
+                                        <li class="flex">
+                                            <div class="w-5 h-5 mr-2 flex-shrink-0 flex items-center justify-center text-yellow-600">
+                                                <i class="ri-check-line"></i>
+                                            </div>
+                                            <span>Keep your resume to 1-2 pages maximum</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <p class="text-gray-600 mb-4">Want to try a different template?</p>
+                        <button id="view-more-templates" class="bg-white text-primary border border-primary px-6 py-3 !rounded-button font-medium hover:bg-primary/5 transition-colors whitespace-nowrap">
+                            View More Templates
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <a href="#" class="text-2xl font-['Pacifico'] text-white mb-4 block">ResumeCraft</a>
+                    <p class="text-gray-400 mb-4">Create professional resumes in minutes, completely free.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-facebook-fill"></i>
+                            </div>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-twitter-x-fill"></i>
+                            </div>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-linkedin-fill"></i>
+                            </div>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-instagram-fill"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#templates" class="text-gray-400 hover:text-white transition-colors">Templates</a></li>
+                        <li><a href="#features" class="text-gray-400 hover:text-white transition-colors">Features</a></li>
+                        <li><a href="#testimonials" class="text-gray-400 hover:text-white transition-colors">Testimonials</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Resume Tips</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Cover Letter Guide</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Interview Preparation</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Career Advice</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Job Search Tips</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <div class="w-5 h-5 mr-2 flex-shrink-0 flex items-center justify-center text-gray-400">
+                                <i class="ri-mail-line"></i>
+                            </div>
+                            <span class="text-gray-400">support@resumecraft.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="w-5 h-5 mr-2 flex-shrink-0 flex items-center justify-center text-gray-400">
+                                <i class="ri-phone-line"></i>
+                            </div>
+                            <span class="text-gray-400">+1 (555) 123-4567</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="w-5 h-5 mr-2 flex-shrink-0 flex items-center justify-center text-gray-400">
+                                <i class="ri-map-pin-line"></i>
+                            </div>
+                            <span class="text-gray-400">123 Resume St, San Francisco, CA 94103</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0">© 2025 ResumeCraft. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Testimonial Slider
+            const testimonialTrack = document.querySelector('.testimonial-track');
+            const testimonialItems = document.querySelectorAll('.testimonial-item');
+            const testimonialDots = document.querySelectorAll('.testimonial-dot');
+            let currentIndex = 0;
+
+            function updateTestimonialSlider() {
+                testimonialTrack.style.transform = `translateX(-${currentIndex * 100}%)`;
+                
+                document.querySelectorAll('.testimonial-dot').forEach((dot, index) => {
+                    if (index === currentIndex) {
+                        dot.classList.add('bg-primary');
+                        dot.classList.remove('bg-gray-300');
+                    } else {
+                        dot.classList.remove('bg-primary');
+                        dot.classList.add('bg-gray-300');
+                    }
+                });
+            }
+
+            document.querySelectorAll('.testimonial-dot').forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentIndex = index;
+                    updateTestimonialSlider();
+                });
+            });
+
+            // Auto slide testimonials
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % testimonialItems.length;
+                updateTestimonialSlider();
+            }, 5000);
+
+            // Resume Builder Navigation
+            const startBuildingBtn = document.getElementById('start-building-btn');
+            const ctaStartBuildingBtn = document.getElementById('cta-start-building-btn');
+            const resumeBuilder = document.getElementById('resume-builder');
+            const resumePreview = document.getElementById('resume-preview');
+            const backToEditBtn = document.getElementById('back-to-edit');
+            const generateResumeBtn = document.getElementById('generate-resume-btn');
+
+            startBuildingBtn.addEventListener('click', function() {
+                resumeBuilder.classList.add('active');
+                window.scrollTo({ top: resumeBuilder.offsetTop - 80, behavior: 'smooth' });
+            });
+
+            ctaStartBuildingBtn.addEventListener('click', function() {
+                resumeBuilder.classList.add('active');
+                window.scrollTo({ top: resumeBuilder.offsetTop - 80, behavior: 'smooth' });
+            });
+
+            generateResumeBtn.addEventListener('click', function() {
+                resumeBuilder.classList.remove('active');
+                resumePreview.classList.add('active');
+                window.scrollTo({ top: resumePreview.offsetTop - 80, behavior: 'smooth' });
+            });
+
+            backToEditBtn.addEventListener('click', function() {
+                resumePreview.classList.remove('active');
+                resumeBuilder.classList.add('active');
+                window.scrollTo({ top: resumeBuilder.offsetTop - 80, behavior: 'smooth' });
+            });
+
+            // Form Steps Navigation
+            const formSteps = document.querySelectorAll('.form-step');
+            const progressBarFill = document.querySelector('.progress-bar-fill');
+            const stepTitle = document.getElementById('step-title');
+            let currentStep = 1;
+            const stepTitles = [
+                'Personal Info',
+                'Career Objective',
+                'Work Experience',
+                'Education',
+                'Skills & Languages',
+                'Finalize'
+            ];
+
+            function updateFormStep() {
+                formSteps.forEach(step => {
+                    step.classList.remove('active');
+                });
+                
+                document.querySelector(`.form-step[data-step="${currentStep}"]`).classList.add('active');
+                
+                // Update progress bar
+                const progressPercentage = ((currentStep - 1) / (formSteps.length - 1)) * 100;
+                progressBarFill.style.width = `${progressPercentage}%`;
+                
+                // Update step indicator
+                document.querySelector('.flex.justify-between.mt-2 span:first-child').textContent = `Step ${currentStep} of ${formSteps.length}`;
+                stepTitle.textContent = stepTitles[currentStep - 1];
+            }
+
+            document.querySelectorAll('.next-step').forEach(button => {
+                button.addEventListener('click', () => {
+                    if (currentStep < formSteps.length) {
+                        currentStep++;
+                        updateFormStep();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.prev-step').forEach(button => {
+                button.addEventListener('click', () => {
+                    if (currentStep > 1) {
+                        currentStep--;
+                        updateFormStep();
+                    }
+                });
+            });
+
+            // Add/Remove Experience
+            const addExperienceBtn = document.getElementById('add-experience');
+            const experienceContainer = document.getElementById('experience-container');
+
+            addExperienceBtn.addEventListener('click', function() {
+                const experienceItem = experienceContainer.querySelector('.experience-item').cloneNode(true);
+                const inputs = experienceItem.querySelectorAll('input, textarea');
+                inputs.forEach(input => input.value = '');
+                
+                const removeBtn = experienceItem.querySelector('.remove-experience');
+                removeBtn.addEventListener('click', function() {
+                    if (experienceContainer.querySelectorAll('.experience-item').length > 1) {
+                        experienceItem.remove();
+                    }
+                });
+                
+                experienceContainer.appendChild(experienceItem);
+            });
+
+            document.querySelectorAll('.remove-experience').forEach(button => {
+                button.addEventListener('click', function() {
+                    if (experienceContainer.querySelectorAll('.experience-item').length > 1) {
+                        this.closest('.experience-item').remove();
+                    }
+                });
+            });
+
+            // Add/Remove Education
+            const addEducationBtn = document.getElementById('add-education');
+            const educationContainer = document.getElementById('education-container');
+
+            addEducationBtn.addEventListener('click', function() {
+                const educationItem = educationContainer.querySelector('.education-item').cloneNode(true);
+                const inputs = educationItem.querySelectorAll('input, textarea');
+                inputs.forEach(input => input.value = '');
+                
+                const removeBtn = educationItem.querySelector('.remove-education');
+                removeBtn.addEventListener('click', function() {
+                    if (educationContainer.querySelectorAll('.education-item').length > 1) {
+                        educationItem.remove();
+                    }
+                });
+                
+                educationContainer.appendChild(educationItem);
+            });
+
+            document.querySelectorAll('.remove-education').forEach(button => {
+                button.addEventListener('click', function() {
+                    if (educationContainer.querySelectorAll('.education-item').length > 1) {
+                        this.closest('.education-item').remove();
+                    }
+                });
+            });
+
+            // Add/Remove Language
+            const addLanguageBtn = document.getElementById('add-language');
+            const languagesContainer = document.getElementById('languages-container');
+
+            addLanguageBtn.addEventListener('click', function() {
+                const languageItem = languagesContainer.querySelector('.language-item').cloneNode(true);
+                const inputs = languageItem.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    if (input.tagName === 'SELECT') {
+                        input.selectedIndex = 0;
+                    } else {
+                        input.value = '';
+                    }
+                });
+                
+                const removeBtn = languageItem.querySelector('.remove-language');
+                removeBtn.addEventListener('click', function() {
+                    if (languagesContainer.querySelectorAll('.language-item').length > 1) {
+                        languageItem.remove();
+                    }
+                });
+                
+                languagesContainer.appendChild(languageItem);
+            });
+
+            document.querySelectorAll('.remove-language').forEach(button => {
+                button.addEventListener('click', function() {
+                    if (languagesContainer.querySelectorAll('.language-item').length > 1) {
+                        this.closest('.language-item').remove();
+                    }
+                });
+            });
+
+            // Add/Remove Certification
+            const addCertificationBtn = document.getElementById('add-certification');
+            const certificationsContainer = document.getElementById('certifications-container');
+
+            addCertificationBtn.addEventListener('click', function() {
+                const certificationItem = certificationsContainer.querySelector('.certification-item').cloneNode(true);
+                const inputs = certificationItem.querySelectorAll('input');
+                inputs.forEach(input => input.value = '');
+                
+                const removeBtn = certificationItem.querySelector('.remove-certification');
+                removeBtn.addEventListener('click', function() {
+                    if (certificationsContainer.querySelectorAll('.certification-item').length > 1) {
+                        certificationItem.remove();
+                    }
+                });
+                
+                certificationsContainer.appendChild(certificationItem);
+            });
+
+            document.querySelectorAll('.remove-certification').forEach(button => {
+                button.addEventListener('click', function() {
+                    if (certificationsContainer.querySelectorAll('.certification-item').length > 1) {
+                        this.closest('.certification-item').remove();
+                    }
+                });
+            });
+
+            // Skills Input
+            const skillInput = document.getElementById('skill-input');
+            
+            skillInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && this.value.trim() !== '') {
+                    e.preventDefault();
+                    
+                    const skillsContainer = this.parentElement.previousElementSibling;
+                    const skillTag = document.createElement('div');
+                    skillTag.className = 'bg-primary/10 text-primary px-3 py-1 rounded-full flex items-center';
+                    skillTag.innerHTML = `
+                        <span>${this.value.trim()}</span>
+                        <button class="ml-2 text-primary/70 hover:text-primary">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <i class="ri-close-line"></i>
+                            </div>
+                        </button>
+                    `;
+                    
+                    skillTag.querySelector('button').addEventListener('click', function() {
+                        skillTag.remove();
+                    });
+                    
+                    skillsContainer.appendChild(skillTag);
+                    this.value = '';
+                }
+            });
+        });
+
+        // Template Selection
+        function selectTemplate(radio) {
+            // Reset all template options
+            document.querySelectorAll('.template-option').forEach(option => {
+                option.classList.remove('border-primary');
+                option.classList.add('border-gray-200');
+                
+                const radioBtn = option.querySelector('.custom-radio');
+                radioBtn.classList.remove('checked');
+            });
+            
+            // Select the clicked template
+            const templateOption = radio.closest('.template-option');
+            templateOption.classList.remove('border-gray-200');
+            templateOption.classList.add('border-primary');
+            radio.classList.add('checked');
+        }
+    </script>
+</body>
+</html>
